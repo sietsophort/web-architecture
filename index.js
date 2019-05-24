@@ -22,7 +22,6 @@ app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT || 3001);
 app.use(express.static(__dirname + '/public'));
 console.log(__dirname + '/public');
-
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
@@ -53,7 +52,7 @@ app.get('/', (req,res)=> {
 //   var id = request.params.id;
 //   response.render('product', {id})
 //   next();
-// }); 
+// });
 
 // app.use('/lists', lists)
 
@@ -78,7 +77,7 @@ app.use(function(err, req, res, next){
 //         console.log("listen on port", app.get('port'));
 //     })
 //   });
-  
+
 
   mongoose.connect('mongodb://localhost:27017/web-arch').then(async () => {
     app.listen(app.get('port'), () => {
