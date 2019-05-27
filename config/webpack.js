@@ -25,24 +25,26 @@ module.exports = (optVersion, overridedOpts) => {
       path: path.resolve(__dirname, `../public/js`),
       filename: `[name]${optVersion}.js`,
     },
-    // resolve: {
-    //   extensions: ['', '.js', '.jsx'],
-    //   modules: [
-    //     'src',
-    //   ],
-    // },
     module: {
-      loaders: [
+      rules: [
         // requires "npm install --save-dev babel-loader"
         {
           exclude: /node_modules/,
           test: /\.js$/,
-          loader: "babel-loader" },
-        {
-          exclude: /(node_modules)/,
-          test: /\.jsx?$/,
-          loader: 'babel-loader'
+          loader: "babel-loader",
+          query: {
+            presets: ['@babel/preset-env']
+          }
         },
+        {
+          exclude: /node_modules/,
+          test: /\.jsx?$/,
+          loader: "babel-loader",
+          query: {
+            presets: ['@babel/preset-env', '@babel/react']
+          }
+        },
+
         {
           exclude: /(node_modules)/,
           test: /\.scss$/,
