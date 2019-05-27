@@ -1,16 +1,16 @@
 //include nessesary file
-const models = require('./models/index');
+import models from'./models/index';
 //const { connectDb } = require('./models/index');
 
 console.log(models);
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const http = require('http');
-const express = require('express');
-const path = require('path');
+import http from 'http'
+import express from 'express'
+import path from 'path'
 const app = express();
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 
 app.disable('x-powered-by');
 

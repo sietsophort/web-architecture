@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const User = require('./user.js');
+import User from './user.js';
 // import Message from './message';
 
 const connectDb = () => {
