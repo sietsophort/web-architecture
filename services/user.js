@@ -5,8 +5,13 @@ async function authenticate({ username, password }) {
   if (user) {
     // eslint-disable-next-line
     const { password, ...result } = user;
-    return result;
+    return { result };
   }
+  const error = {
+    message: 'Authentication failed',
+  };
+
+  return { error };
 }
 
 async function getAll() {
