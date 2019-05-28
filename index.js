@@ -1,22 +1,17 @@
-// include nessesary file
-import mongoose from 'mongoose';
-
-import http from 'http';
-import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import uuid from 'uuid';
 import session from 'express-session';
-import models from './models/index';
-// const { connectDb } = require('./models/index');
+import { connectDb, models } from './models';
+import { checkAndClearCookie, errorHandler, auth } from './middlewares';
+import routes from './routes';
 
-console.log(models);
+const FileStore = require('session-file-store')(session);
+const express = require('express');
+
 const app = express();
-
 app.disable('x-powered-by');
-
-// configure application
 const handlebars = require('express-handlebars').create({ defaultLayout: 'main' });
 
 app.engine('handlebars', handlebars.engine);
@@ -24,64 +19,28 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT || 3001);
 app.use(express.static(`${__dirname}/public`));
-console.log(`${__dirname}/public`);
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
   extended: true,
 }));
+app.use(bodyParser.json());
+app.use(session({
+  genid: (req) => {
+    console.log('Inside the session middleware');
+    console.log(req.sessionID);
+    return uuid(); // use UUIDs for session IDs
+  },
+  secret: 'keyboard cat',
+  store: new FileStore(),
+  resave: false,
+  saveUninitialized: true,
+}));
+app.use(checkAndClearCookie);
+// app.use(auth);
+app.use('/', routes);
+// app.use(errorHandler);
 
-// data
-// var {items} =  require('./data/data.json')
-
-// routes
-// const about = require('./routes/about')
-// const contact = require('./routes/contact')
-// const deals = require('./routes/deals')
-// const all = require('./routes/all')
-// const post = require('./routes/post')
-// const lists = require('./routes/lists');
-// const product = require('./routes/product')
-app.get('/', (req, res) => {
-  res.render('index', { active: { home: true } });
-});
-// app.use('/about', about)
-// app.use('/contact', contact)
-// app.use('/deals', deals)
-// app.use('/all', all)
-// app.use('/post', post)
-// app.use('/product', product)
-// app.use('/product/:id', product)
-
-// app.get('/product/:id', function(request, response, next) {
-//   var id = request.params.id;
-//   response.render('product', {id})
-//   next();
-// });
-
-// app.use('/lists', lists)
-
-
-app.use((req, res) => {
-  console.log('Error 404');
-  res.type('text/html');
-  res.status(404);
-  res.render('404');
-});
-app.use((err, req, res, next) => {
-  res.type('text/html');
-  res.status(500);
-  res.render('500');
-  console.log('Error 500');
-});
-
-
-// connectDb().then(async () => {
-//     app.listen(app.get('port'), () => {
-//         console.log("listen on port", app.get('port'));
-//     })
-//   });
-
-
-mongoose.connect('mongodb://localhost:27017/web-arch').then(async () => {
+connectDb().then(async () => {
   app.listen(app.get('port'), () => {
     console.log('listen on port', app.get('port'));
   });

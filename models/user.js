@@ -7,20 +7,20 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-  }
+  },
 });
 
-userSchema.statics.findByLogin = async function (login) {
-    let user = await this.findOne({
-      username: login,
-    });
+userSchema.statics.findByLogin = async (login) => {
+  let user = await this.findOne({
+    username: login,
+  });
 
-    if (!user) {
-      user = await this.findOne({ email: login });
-    }
+  if (!user) {
+    user = await this.findOne({ email: login });
+  }
 
-    return user;
-  };
+  return user;
+};
 
 const User = mongoose.model('User', userSchema);
 

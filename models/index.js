@@ -1,14 +1,12 @@
 import mongoose from 'mongoose';
 
-import User from './user.js';
-// import Message from './message';
+import User from './user';
 
-const connectDb = () => {
-  return mongoose.connect('mongodb://localhost:27017/web-arch');
-};
-
+const connectDb = () => mongoose.connect('mongodb://localhost:27017/web-arch', { useNewUrlParser: true });
+mongoose.set('useCreateIndex', true);
 const models = { User };
 
-module.exports = connectDb;
-
-module.exports = models;
+export {
+  connectDb,
+  models,
+};
