@@ -30,6 +30,9 @@ knexfile.js
 node_modules
 bower_components
 
+# Sessions
+sessions
+
 # Editors
 .idea
 .vscode
